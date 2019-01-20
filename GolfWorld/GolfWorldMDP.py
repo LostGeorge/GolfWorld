@@ -1,4 +1,4 @@
-import random
+import random, math
 from numpy.random import normal
 from simple_rl.mdp.MDPClass import MDP
 from .GolfWorldState import GolfWorldState
@@ -86,15 +86,13 @@ class GolfWorldMDP(MDP):
         return (wind_x,wind_y)
     
     def _rand_movement(self, action):
-        rand_x = 0.0
-        rand_y = 0.0
+        rand_r = 0.0
+        rand_deg = random.random()*math.pi
         if self._is_driver_action(action=action):
-            rand_x += normal(0.0,2.0,None)
-            rand_y += normal(0.0,2.0,None)
+            rand_r += normal(0.0,2.0,None)
         elif self._is_iron_action(action=action):
-            rand_x += normal(0.0,1.0,None)
-            rand_y += normal(0.0,1.0,None)
-        return (rand_x,rand_y)
+            rand_r += normal(0.0,1.0,None)
+        return (rand_r*math.cos(rand_deg),rand_r*math.sin(rand_deg))
 
     def _transition_pos(self, state, action):
         if state.is_terminal():
